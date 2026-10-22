@@ -102,6 +102,12 @@ body.lbopen{overflow:hidden}
 .lbnav[hidden]{display:none}
 .lb{padding-top:76px}
 @media (max-width:640px){.lbnav{top:auto;bottom:max(16px,env(safe-area-inset-bottom,0px));transform:none;width:48px;height:48px}.lbframe{height:min(60vh,700px)}}
+
+#lbwrap{position:relative}#lbwrap iframe,#lbframe{width:100%;height:100%;border:0;display:block;pointer-events:none}
+.shield{position:absolute;inset:0;background:transparent;border:0;padding:0;cursor:pointer;z-index:2}
+.pchip{position:absolute;left:12px;bottom:12px;z-index:3;background:rgba(15,26,36,.85);color:var(--w);border-radius:999px;padding:8px 14px;font-size:13px;font-weight:600;pointer-events:none}
+.sound{position:absolute;right:12px;top:12px;z-index:3;min-height:36px;padding:0 14px;border-radius:999px;border:1px solid var(--l);background:rgba(15,26,36,.85);color:var(--w);font-size:13px;font-weight:600;cursor:pointer}
+.sound.on{border-color:var(--g);color:var(--g)}
 </style>
 </head>
 <body>
@@ -185,14 +191,30 @@ const ag=document.getElementById('acegrid');const aceSet=CLIPS.filter(c=>c.kind=
 const mg=document.getElementById('missgrid');const ms=CLIPS.filter(c=>c.kind==='miss').reverse();const missSet=ms.filter(c=>c.id);ms.forEach(c=>mg.appendChild(tile(c,false,missSet)));
 document.getElementById('mcountall').textContent=`${ms.length} near misses in October`;
 </script>
-<div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="Video player"><div class="lbtop"><button type="button" class="lbback" id="lbx">← Back to videos</button><div class="lbcount" id="lbcount"></div></div><button type="button" class="lbnav prev" id="lbprev" aria-label="Previous video">‹</button><button type="button" class="lbnav next" id="lbnext" aria-label="Next video">›</button><div class="lbin"><div class="lbframe" id="lbframe"></div><div class="lbcap" id="lbcap"></div><div class="lbhint">Tap the video to pause · swipe or use the arrows for the next shot</div></div></div>
+<div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="Video player"><div class="lbtop"><button type="button" class="lbback" id="lbx">← Back to videos</button><div class="lbcount" id="lbcount"></div></div><button type="button" class="lbnav prev" id="lbprev" aria-label="Previous video">‹</button><button type="button" class="lbnav next" id="lbnext" aria-label="Next video">›</button><div class="lbin"><div class="lbframe" id="lbwrap"><div id="lbframe"></div><button type="button" class="shield" id="lbshield" aria-label="Pause or play video"></button><div class="pchip" id="lbstate" hidden>▶ Paused · tap to play</div><button type="button" class="sound" id="lbsound" aria-label="Turn sound on">Sound off</button></div><div class="lbcap" id="lbcap"></div><div class="lbhint">Tap the video to pause · swipe or use the arrows for the next shot</div></div></div>
 <script>
 const LB=document.getElementById('lb'),LBF=document.getElementById('lbframe');let lbLast=null;
+
+let YTP=null,ytReady=null,ytPending=null,ytMuted=false;
+function ytApi(){if(ytReady)return ytReady;ytReady=new Promise(res=>{window.onYouTubeIframeAPIReady=()=>res();const t=document.createElement('script');t.src='https://www.youtube.com/iframe_api';document.head.appendChild(t)});return ytReady}
+const ST=document.getElementById('lbstate'),SND=document.getElementById('lbsound');
+function setPaused(p,ended){ST.hidden=!p;ST.textContent=ended?'↺ Tap to watch again':'▶ Paused · tap to play'}
+function setSound(){SND.textContent=ytMuted?'Sound off':'Sound on';SND.setAttribute('aria-label',ytMuted?'Turn sound on':'Turn sound off');SND.classList.toggle('on',!ytMuted)}
+function killYT(){try{YTP&&YTP.destroy()}catch(e){}YTP=null;document.getElementById('lbwrap').querySelector('#lbframe')||(()=>{const d=document.createElement('div');d.id='lbframe';document.getElementById('lbwrap').prepend(d)})();setPaused(false)}
+async function loadYT(id){ytPending=id;await ytApi();if(ytPending!==id)return;
+ if(YTP&&YTP.loadVideoById){YTP.loadVideoById(id);setPaused(false);return}
+ const host=document.getElementById('lbframe');
+ YTP=new YT.Player(host,{host:'https://www.youtube-nocookie.com',videoId:id,width:'100%',height:'100%',
+  playerVars:{autoplay:1,controls:0,disablekb:1,fs:0,iv_load_policy:3,playsinline:1,rel:0,modestbranding:1,origin:location.origin},
+  events:{onReady:e=>{e.target.playVideo();setTimeout(()=>{try{ytMuted=e.target.isMuted();if(e.target.getPlayerState()!==1){e.target.mute();ytMuted=true;e.target.playVideo()}setSound()}catch(_){}} ,900)},
+   onStateChange:e=>{const st=e.data;if(st===1)setPaused(false);else if(st===2)setPaused(true);else if(st===0){try{const d=e.target.getDuration();e.target.seekTo(Math.max(0,d-0.1),true);e.target.pauseVideo()}catch(_){}setPaused(true,true)}}}})}
+document.getElementById('lbshield').onclick=()=>{if(!YTP||!YTP.getPlayerState)return;const st=YTP.getPlayerState();if(st===1)YTP.pauseVideo();else{if(!ST.hidden&&ST.textContent.startsWith('↺'))YTP.seekTo(0,true);YTP.playVideo()}};
+SND.onclick=e=>{e.stopPropagation();if(!YTP)return;if(YTP.isMuted()){YTP.unMute();YTP.setVolume(100);ytMuted=false}else{YTP.mute();ytMuted=true}setSound()};
 let lbSet=[],lbIdx=0;
 const PLAYABLE=CLIPS.filter(c=>c.id);
 function lbLabel(c){return c.kind==='ace'?`Ace #${c.n}`:'So close'}
 function showClip(){const c=lbSet[lbIdx],label=lbLabel(c);
- LBF.innerHTML=`<iframe src="https://www.youtube-nocookie.com/embed/${c.id}?autoplay=1&playsinline=1&rel=0&controls=0&iv_load_policy=3" title="${label}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>`;
+ loadYT(c.id);
  const d=new Date(c.date+'T00:00:00');document.getElementById('lbcap').innerHTML=`<b>${label}</b>${d.getDate()} ${d.toLocaleDateString('en-GB',{month:'short'})} · ${c.time}${c.rank?' · #'+c.rank+' in the world':''}`;
  
  const n=lbSet.length;document.getElementById('lbcount').textContent=n>1?`${lbIdx+1} of ${n}`:'';
@@ -200,7 +222,7 @@ function showClip(){const c=lbSet[lbIdx],label=lbLabel(c);
 function stepClip(d){if(lbSet.length<2)return;lbIdx=(lbIdx+d+lbSet.length)%lbSet.length;showClip()}
 function openPlayer(c,set){lbLast=document.activeElement;lbSet=set&&set.length?set:[c];lbIdx=Math.max(0,lbSet.findIndex(x=>x.id===c.id));
  showClip();LB.hidden=false;document.body.classList.add('lbopen');document.getElementById('lbx').focus()}
-function closePlayer(){LB.hidden=true;LBF.innerHTML='';document.body.classList.remove('lbopen');if(lbLast)lbLast.focus()}
+function closePlayer(){LB.hidden=true;killYT();document.body.classList.remove('lbopen');if(lbLast)lbLast.focus()}
 document.getElementById('lbx').onclick=closePlayer;LB.addEventListener('click',e=>{if(e.target===LB)closePlayer()});
 document.addEventListener('keydown',e=>{if(LB.hidden)return;if(e.key==='Escape')closePlayer();if(e.key==='ArrowRight')stepClip(1);if(e.key==='ArrowLeft')stepClip(-1)});
 document.getElementById('lbprev').onclick=()=>stepClip(-1);document.getElementById('lbnext').onclick=()=>stepClip(1);

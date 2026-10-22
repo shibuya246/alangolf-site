@@ -192,7 +192,7 @@ let lbSet=[],lbIdx=0;
 const PLAYABLE=CLIPS.filter(c=>c.id);
 function lbLabel(c){return c.kind==='ace'?`Ace #${c.n}`:'So close'}
 function showClip(){const c=lbSet[lbIdx],label=lbLabel(c);
- LBF.innerHTML=`<iframe src="https://www.youtube-nocookie.com/embed/${c.id}?autoplay=1&playsinline=1&rel=0" title="${label}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>`;
+ LBF.innerHTML=`<iframe src="https://www.youtube-nocookie.com/embed/${c.id}?autoplay=1&playsinline=1&rel=0&loop=1&playlist=${c.id}" title="${label}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>`;
  const d=new Date(c.date+'T00:00:00');document.getElementById('lbcap').innerHTML=`<b>${label}</b>${d.getDate()} ${d.toLocaleDateString('en-GB',{month:'short'})} · ${c.time}${c.rank?' · #'+c.rank+' in the world':''}`;
  
  const n=lbSet.length;document.getElementById('lbcount').textContent=n>1?`${lbIdx+1} of ${n}`:'';

@@ -88,14 +88,24 @@ footer{padding:32px 0;color:var(--gr);font-size:13px}
 .lbframe{height:min(82vh,860px);aspect-ratio:9/16;max-width:calc(100vw - 32px);border-radius:18px;overflow:hidden;background:#000;box-shadow:0 20px 60px rgba(0,0,0,.5)}
 .lbframe iframe{width:100%;height:100%;border:0;display:block}
 .lbcap{font-size:15px;color:var(--w);text-align:center}.lbcap b{font-family:'Barlow Condensed',sans-serif;font-size:24px;color:var(--g);margin-right:8px;text-transform:uppercase}
-.lbx{position:absolute;top:max(16px,env(safe-area-inset-top,0px));right:max(16px,env(safe-area-inset-right,0px));width:48px;height:48px;border-radius:999px;border:1px solid var(--l);background:var(--p);color:var(--w);font-size:22px;cursor:pointer}
+.lbx-old{position:absolute;top:max(16px,env(safe-area-inset-top,0px));right:max(16px,env(safe-area-inset-right,0px));width:48px;height:48px;border-radius:999px;border:1px solid var(--l);background:var(--p);color:var(--w);font-size:22px;cursor:pointer}
 body.lbopen{overflow:hidden}
 .lbact{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
 .lbbtn{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 18px;border-radius:999px;border:1px solid var(--l);background:var(--p);color:var(--w);font-weight:600;font-size:15px;text-decoration:none}
 .lbbtn:hover{border-color:var(--g)}
 .lbbtn.sub{background:var(--g);border-color:var(--g);color:var(--n)}
 .lbhint{font-size:12px;color:var(--gr)}
-.lbframe{height:min(74vh,800px)}
+.lbframe{height:min(66vh,760px)}
+.lbtop{position:absolute;top:max(14px,env(safe-area-inset-top,0px));left:max(16px,env(safe-area-inset-left,0px));right:max(16px,env(safe-area-inset-right,0px));display:flex;justify-content:space-between;align-items:center;gap:12px}
+.lbback{min-height:44px;padding:0 18px;border-radius:999px;border:1px solid var(--g);background:var(--p);color:var(--w);font-weight:600;font-size:15px;cursor:pointer}
+.lbback:hover{background:var(--g);color:var(--n)}
+.lbcount{font-size:14px;color:var(--gr)}
+.lbnav{position:absolute;top:50%;transform:translateY(-50%);width:56px;height:56px;border-radius:999px;border:1px solid var(--l);background:var(--p);color:var(--w);font-size:28px;cursor:pointer}
+.lbnav:hover{border-color:var(--g)}
+.lbnav.prev{left:max(16px,calc(50% - 300px))}.lbnav.next{right:max(16px,calc(50% - 300px))}
+.lbnav[hidden]{display:none}
+.lb{padding-top:76px}
+@media (max-width:640px){.lbnav{top:auto;bottom:max(16px,env(safe-area-inset-bottom,0px));transform:none;width:48px;height:48px}.lbframe{height:min(60vh,700px)}}
 </style>
 </head>
 <body>
@@ -136,11 +146,11 @@ body.lbopen{overflow:hidden}
 const CLIPS=[{"kind":"miss","n":null,"date":"2026-10-06","time":"18:58","id":null,"poster":null},{"kind":"miss","n":null,"date":"2026-10-06","time":"18:59","id":null,"poster":null},{"kind":"miss","n":null,"date":"2026-10-06","time":"19:01","id":null,"poster":null},{"kind":"miss","n":null,"date":"2026-10-06","time":"19:03","id":null,"poster":null},{"kind":"miss","n":null,"date":"2026-10-07","time":"22:30","id":null,"poster":null},{"kind":"miss","n":null,"date":"2026-10-07","time":"22:31","id":"c4U-B5n0pvI","poster":"https://i.ytimg.com/vi/c4U-B5n0pvI/oardefault.jpg"},{"kind":"miss","n":null,"date":"2026-10-10","time":"20:44","id":null,"poster":null},{"kind":"miss","n":null,"date":"2026-10-10","time":"21:53","id":null,"poster":null},{"kind":"ace","n":15,"date":"2026-10-10","time":"22:07","id":null,"poster":null,"rank":11},{"kind":"miss","n":null,"date":"2026-10-10","time":"22:10","id":null,"poster":null},{"kind":"ace","n":16,"date":"2026-10-16","time":"17:38","id":"GQ9y1wUhkWg","poster":"https://i.ytimg.com/vi/GQ9y1wUhkWg/oardefault.jpg","rank":11},{"kind":"miss","n":null,"date":"2026-10-16","time":"17:45","id":null,"poster":null},{"kind":"miss","n":null,"date":"2026-10-16","time":"17:46","id":null,"poster":null},{"kind":"miss","n":null,"date":"2026-10-16","time":"17:49","id":null,"poster":null},{"kind":"miss","n":null,"date":"2026-10-16","time":"18:02","id":null,"poster":null},{"kind":"miss","n":null,"date":"2026-10-16","time":"18:10","id":null,"poster":null},{"kind":"ace","n":17,"date":"2026-10-16","time":"18:13","id":"rxe7CDJMqKc","poster":"https://i.ytimg.com/vi/rxe7CDJMqKc/oardefault.jpg","rank":9},{"kind":"miss","n":null,"date":"2026-10-16","time":"18:15","id":null,"poster":null},{"kind":"miss","n":null,"date":"2026-10-16","time":"18:28","id":null,"poster":null},{"kind":"ace","n":18,"date":"2026-10-16","time":"18:29","id":"IcnmYpnFRvk","poster":"https://i.ytimg.com/vi/IcnmYpnFRvk/oardefault.jpg","rank":8},{"kind":"miss","n":null,"date":"2026-10-16","time":"18:32","id":null,"poster":null},{"kind":"miss","n":null,"date":"2026-10-16","time":"19:22","id":null,"poster":null},{"kind":"miss","n":null,"date":"2026-10-16","time":"19:27","id":null,"poster":null},{"kind":"miss","n":null,"date":"2026-10-17","time":"16:50","id":null,"poster":null},{"kind":"miss","n":null,"date":"2026-10-17","time":"17:31","id":null,"poster":null},{"kind":"miss","n":null,"date":"2026-10-17","time":"17:32","id":null,"poster":null},{"kind":"miss","n":null,"date":"2026-10-17","time":"17:42","id":"ACFsI4KIJwY","poster":"https://i.ytimg.com/vi/ACFsI4KIJwY/oardefault.jpg"},{"kind":"miss","n":null,"date":"2026-10-20","time":"18:10","id":null,"poster":null},{"kind":"miss","n":null,"date":"2026-10-20","time":"18:52","id":null,"poster":null},{"kind":"ace","n":19,"date":"2026-10-21","time":"14:47","id":null,"poster":null,"rank":7},{"kind":"miss","n":null,"date":"2026-10-21","time":"15:45","id":null,"poster":null},{"kind":"miss","n":null,"date":"2026-10-21","time":"15:57","id":null,"poster":null},{"kind":"miss","n":null,"date":"2026-10-21","time":"16:09","id":null,"poster":null},{"kind":"miss","n":null,"date":"2026-10-21","time":"16:11","id":null,"poster":null}];
 const MON=['January','February','March','April','May','June','July','August','September','October','November','December'];
 const fmt=d=>{const [y,m,dd]=d.split('-').map(Number);return new Date(y,m-1,dd)};
-function tile(c,noDate){const w=document.createElement('div');w.className='clip';
+function tile(c,noDate,set){const w=document.createElement('div');w.className='clip';
  const label=c.kind==='ace'?`Ace #${c.n}`:'So close';
  if(c.id){const b=document.createElement('button');b.type='button';b.className='player';b.setAttribute('aria-label',`Play ${label}, ${c.date} ${c.time}`);
   b.innerHTML=`<img alt="" loading="lazy" src="${c.poster}" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/${c.id}/hqdefault.jpg'"><div class="play" aria-hidden="true">▶</div>`;
-  b.onclick=()=>openPlayer(c,label);
+  b.onclick=()=>openPlayer(c,(set||PLAYABLE));
   w.appendChild(b)}
  else{const s=document.createElement('div');s.className='soon';s.innerHTML=`<div><div class="big" style="font-size:28px;color:${c.kind==='ace'?'var(--g)':'var(--w)'}">${label}</div>Uploading soon</div>`;w.appendChild(s)}
  const cap=document.createElement('div');cap.className='cap';const d=fmt(c.date);
@@ -165,29 +175,40 @@ function render(){const days=document.getElementById('days');days.innerHTML='';
  const nums=list.filter(c=>c.kind==='ace').map(c=>c.n);const nm=list.length-nums.length;
  document.getElementById('phead').textContent=nums.length?(nums.length>1?`Hole-in-ones #${nums[0]}–${nums[nums.length-1]}`:`Hole-in-one #${nums[0]}`):`${nm} near miss${nm>1?'es':''}`;
  const pc=document.getElementById('pclips');pc.innerHTML='';
- const acesL=list.filter(c=>c.kind==='ace'),missL=list.filter(c=>c.kind==='miss');
- if(acesL.length){const g=document.createElement('div');g.className='acerow';g.style.setProperty('--n',Math.min(acesL.length,3));acesL.forEach(c=>g.appendChild(tile(c,true)));pc.appendChild(g)}
+ const acesL=list.filter(c=>c.kind==='ace'),missL=list.filter(c=>c.kind==='miss');const daySet=[...acesL,...missL].filter(c=>c.id);
+ if(acesL.length){const g=document.createElement('div');g.className='acerow';g.style.setProperty('--n',Math.min(acesL.length,3));acesL.forEach(c=>g.appendChild(tile(c,true,daySet)));pc.appendChild(g)}
  if(missL.length){const wrap=document.createElement('div');wrap.className='mc';
   wrap.innerHTML=`<div class="mchead"><div class="kick">${missL.length} near miss${missL.length>1?'es':''} · in session order</div><div class="mcbtns"><button type="button" class="mcb" aria-label="Scroll near misses left">‹</button><button type="button" class="mcb" aria-label="Scroll near misses right">›</button></div></div>`;
-  const tr=document.createElement('div');tr.className='track';missL.forEach(c=>{const t=tile(c,true);t.classList.add('mini');tr.appendChild(t)});wrap.appendChild(tr);
+  const tr=document.createElement('div');tr.className='track';missL.forEach(c=>{const t=tile(c,true,daySet);t.classList.add('mini');tr.appendChild(t)});wrap.appendChild(tr);
   const [l,r]=wrap.querySelectorAll('.mcb');const step=()=>tr.clientWidth*0.8;l.onclick=()=>tr.scrollBy({left:-step(),behavior:'smooth'});r.onclick=()=>tr.scrollBy({left:step(),behavior:'smooth'});
   const upd=()=>{l.disabled=tr.scrollLeft<4;r.disabled=tr.scrollLeft+tr.clientWidth>=tr.scrollWidth-4};tr.addEventListener('scroll',upd,{passive:true});requestAnimationFrame(upd);
   pc.appendChild(wrap)}}
 document.getElementById('prev').onclick=()=>{m--;if(m<0){m=11;y--}render()};document.getElementById('next').onclick=()=>{m++;if(m>11){m=0;y++}render()};
 render();
-const ag=document.getElementById('acegrid');CLIPS.filter(c=>c.kind==='ace').reverse().forEach(c=>ag.appendChild(tile(c)));
-const mg=document.getElementById('missgrid');const ms=CLIPS.filter(c=>c.kind==='miss').reverse();ms.forEach(c=>mg.appendChild(tile(c)));
+const ag=document.getElementById('acegrid');const aceSet=CLIPS.filter(c=>c.kind==='ace'&&c.id).reverse();CLIPS.filter(c=>c.kind==='ace').reverse().forEach(c=>ag.appendChild(tile(c,false,aceSet)));
+const mg=document.getElementById('missgrid');const ms=CLIPS.filter(c=>c.kind==='miss').reverse();const missSet=ms.filter(c=>c.id);ms.forEach(c=>mg.appendChild(tile(c,false,missSet)));
 document.getElementById('mcountall').textContent=`${ms.length} near misses in October`;
 </script>
-<div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="Video player"><button type="button" class="lbx" id="lbx" aria-label="Close video">✕</button><div class="lbin"><div class="lbframe" id="lbframe"></div><div class="lbcap" id="lbcap"></div><div class="lbact"><a class="lbbtn" id="lblike" target="_blank" rel="noopener" href="#"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 10v11"/><path d="M15 5.9 14 10h5.8a2 2 0 0 1 2 2.3l-1.4 7A2 2 0 0 1 18.4 21H7V10l4.3-7.3A1.9 1.9 0 0 1 15 4.6z"/></svg>Like on YouTube</a><a class="lbbtn sub" target="_blank" rel="noopener" href="https://www.youtube.com/@alangolfing?sub_confirmation=1"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M23 7.2a3 3 0 0 0-2.1-2.1C19 4.6 12 4.6 12 4.6s-7 0-8.9.5A3 3 0 0 0 1 7.2 31 31 0 0 0 .5 12a31 31 0 0 0 .5 4.8 3 3 0 0 0 2.1 2.1c1.9.5 8.9.5 8.9.5s7 0 8.9-.5a3 3 0 0 0 2.1-2.1 31 31 0 0 0 .5-4.8 31 31 0 0 0-.5-4.8zM9.8 15.1V8.9L15.5 12z"/></svg>Subscribe</a></div><div class="lbhint">Tap the video to pause</div></div></div>
+<div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="Video player"><div class="lbtop"><button type="button" class="lbback" id="lbx">← Back to videos</button><div class="lbcount" id="lbcount"></div></div><button type="button" class="lbnav prev" id="lbprev" aria-label="Previous video">‹</button><button type="button" class="lbnav next" id="lbnext" aria-label="Next video">›</button><div class="lbin"><div class="lbframe" id="lbframe"></div><div class="lbcap" id="lbcap"></div><div class="lbact"><a class="lbbtn" id="lblike" target="_blank" rel="noopener" href="#"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 10v11"/><path d="M15 5.9 14 10h5.8a2 2 0 0 1 2 2.3l-1.4 7A2 2 0 0 1 18.4 21H7V10l4.3-7.3A1.9 1.9 0 0 1 15 4.6z"/></svg>Like on YouTube</a><a class="lbbtn sub" target="_blank" rel="noopener" href="https://www.youtube.com/@alangolfing?sub_confirmation=1"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M23 7.2a3 3 0 0 0-2.1-2.1C19 4.6 12 4.6 12 4.6s-7 0-8.9.5A3 3 0 0 0 1 7.2 31 31 0 0 0 .5 12a31 31 0 0 0 .5 4.8 3 3 0 0 0 2.1 2.1c1.9.5 8.9.5 8.9.5s7 0 8.9-.5a3 3 0 0 0 2.1-2.1 31 31 0 0 0 .5-4.8 31 31 0 0 0-.5-4.8zM9.8 15.1V8.9L15.5 12z"/></svg>Subscribe</a></div><div class="lbhint">Tap the video to pause · swipe or use the arrows for the next shot</div></div></div>
 <script>
 const LB=document.getElementById('lb'),LBF=document.getElementById('lbframe');let lbLast=null;
-function openPlayer(c,label){lbLast=document.activeElement;LBF.innerHTML=`<iframe src="https://www.youtube-nocookie.com/embed/${c.id}?autoplay=1&playsinline=1&rel=0&loop=1&playlist=${c.id}&controls=0&disablekb=1&iv_load_policy=3&modestbranding=1&fs=0" title="${label}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>`;
+let lbSet=[],lbIdx=0;
+const PLAYABLE=CLIPS.filter(c=>c.id);
+function lbLabel(c){return c.kind==='ace'?`Ace #${c.n}`:'So close'}
+function showClip(){const c=lbSet[lbIdx],label=lbLabel(c);
+ LBF.innerHTML=`<iframe src="https://www.youtube-nocookie.com/embed/${c.id}?autoplay=1&playsinline=1&rel=0&loop=1&playlist=${c.id}&controls=0&disablekb=1&iv_load_policy=3&modestbranding=1&fs=0" title="${label}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>`;
  const d=new Date(c.date+'T00:00:00');document.getElementById('lbcap').innerHTML=`<b>${label}</b>${d.getDate()} ${d.toLocaleDateString('en-GB',{month:'short'})} · ${c.time}${c.rank?' · #'+c.rank+' in the world':''}`;
- LB.hidden=false;document.body.classList.add('lbopen');document.getElementById('lblike').href=`https://www.youtube.com/shorts/${c.id}`;document.getElementById('lbx').focus()}
+ document.getElementById('lblike').href=`https://www.youtube.com/shorts/${c.id}`;
+ const n=lbSet.length;document.getElementById('lbcount').textContent=n>1?`${lbIdx+1} of ${n}`:'';
+ document.getElementById('lbprev').hidden=n<2;document.getElementById('lbnext').hidden=n<2}
+function stepClip(d){if(lbSet.length<2)return;lbIdx=(lbIdx+d+lbSet.length)%lbSet.length;showClip()}
+function openPlayer(c,set){lbLast=document.activeElement;lbSet=set&&set.length?set:[c];lbIdx=Math.max(0,lbSet.findIndex(x=>x.id===c.id));
+ showClip();LB.hidden=false;document.body.classList.add('lbopen');document.getElementById('lbx').focus()}
 function closePlayer(){LB.hidden=true;LBF.innerHTML='';document.body.classList.remove('lbopen');if(lbLast)lbLast.focus()}
 document.getElementById('lbx').onclick=closePlayer;LB.addEventListener('click',e=>{if(e.target===LB)closePlayer()});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!LB.hidden)closePlayer()});
+document.addEventListener('keydown',e=>{if(LB.hidden)return;if(e.key==='Escape')closePlayer();if(e.key==='ArrowRight')stepClip(1);if(e.key==='ArrowLeft')stepClip(-1)});
+document.getElementById('lbprev').onclick=()=>stepClip(-1);document.getElementById('lbnext').onclick=()=>stepClip(1);
+let tx=null;LB.addEventListener('touchstart',e=>{tx=e.touches[0].clientX},{passive:true});LB.addEventListener('touchend',e=>{if(tx===null)return;const dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>60)stepClip(dx<0?1:-1);tx=null});
 </script>
 </body>
 </html>

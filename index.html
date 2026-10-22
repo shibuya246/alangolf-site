@@ -81,6 +81,15 @@ button.day.sel{background:var(--g);color:var(--n)}
 @media (prefers-reduced-motion:reduce){.track{scroll-behavior:auto}}
 footer{padding:32px 0;color:var(--gr);font-size:13px}
 .note{background:#22303C;border-left:0;border-radius:12px;padding:12px 16px;font-size:13px;color:var(--gr);margin-top:12px}
+
+.lb{position:fixed;inset:0;z-index:50;background:rgba(8,14,20,.92);display:flex;align-items:center;justify-content:center;padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.lb[hidden]{display:none}
+.lbin{display:flex;flex-direction:column;gap:12px;align-items:center;max-width:100%}
+.lbframe{height:min(82vh,860px);aspect-ratio:9/16;max-width:calc(100vw - 32px);border-radius:18px;overflow:hidden;background:#000;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.lbframe iframe{width:100%;height:100%;border:0;display:block}
+.lbcap{font-size:15px;color:var(--w);text-align:center}.lbcap b{font-family:'Barlow Condensed',sans-serif;font-size:24px;color:var(--g);margin-right:8px;text-transform:uppercase}
+.lbx{position:absolute;top:max(16px,env(safe-area-inset-top,0px));right:max(16px,env(safe-area-inset-right,0px));width:48px;height:48px;border-radius:999px;border:1px solid var(--l);background:var(--p);color:var(--w);font-size:22px;cursor:pointer}
+body.lbopen{overflow:hidden}
 </style>
 </head>
 <body>
@@ -125,7 +134,7 @@ function tile(c,noDate){const w=document.createElement('div');w.className='clip'
  const label=c.kind==='ace'?`Ace #${c.n}`:'So close';
  if(c.id){const b=document.createElement('button');b.type='button';b.className='player';b.setAttribute('aria-label',`Play ${label}, ${c.date} ${c.time}`);
   b.innerHTML=`<img alt="" loading="lazy" src="${c.poster}" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/${c.id}/hqdefault.jpg'"><div class="play" aria-hidden="true">▶</div>`;
-  b.onclick=()=>{const box=document.createElement('div');box.className='player';const f=document.createElement('iframe');f.src=`https://www.youtube-nocookie.com/embed/${c.id}?autoplay=1&playsinline=1&rel=0&loop=1&playlist=${c.id}`;f.allow='autoplay; encrypted-media; picture-in-picture; fullscreen';f.allowFullscreen=true;f.title=label;f.style.cssText='width:100%;height:100%;border:0;display:block';box.appendChild(f);b.replaceWith(box)};
+  b.onclick=()=>openPlayer(c,label);
   w.appendChild(b)}
  else{const s=document.createElement('div');s.className='soon';s.innerHTML=`<div><div class="big" style="font-size:28px;color:${c.kind==='ace'?'var(--g)':'var(--w)'}">${label}</div>Uploading soon</div>`;w.appendChild(s)}
  const cap=document.createElement('div');cap.className='cap';const d=fmt(c.date);
@@ -163,6 +172,16 @@ render();
 const ag=document.getElementById('acegrid');CLIPS.filter(c=>c.kind==='ace').reverse().forEach(c=>ag.appendChild(tile(c)));
 const mg=document.getElementById('missgrid');const ms=CLIPS.filter(c=>c.kind==='miss').reverse();ms.forEach(c=>mg.appendChild(tile(c)));
 document.getElementById('mcountall').textContent=`${ms.length} near misses in October`;
+</script>
+<div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="Video player"><button type="button" class="lbx" id="lbx" aria-label="Close video">✕</button><div class="lbin"><div class="lbframe" id="lbframe"></div><div class="lbcap" id="lbcap"></div></div></div>
+<script>
+const LB=document.getElementById('lb'),LBF=document.getElementById('lbframe');let lbLast=null;
+function openPlayer(c,label){lbLast=document.activeElement;LBF.innerHTML=`<iframe src="https://www.youtube-nocookie.com/embed/${c.id}?autoplay=1&playsinline=1&rel=0&loop=1&playlist=${c.id}" title="${label}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>`;
+ const d=new Date(c.date+'T00:00:00');document.getElementById('lbcap').innerHTML=`<b>${label}</b>${d.getDate()} ${d.toLocaleDateString('en-GB',{month:'short'})} · ${c.time}${c.rank?' · #'+c.rank+' in the world':''}`;
+ LB.hidden=false;document.body.classList.add('lbopen');document.getElementById('lbx').focus()}
+function closePlayer(){LB.hidden=true;LBF.innerHTML='';document.body.classList.remove('lbopen');if(lbLast)lbLast.focus()}
+document.getElementById('lbx').onclick=closePlayer;LB.addEventListener('click',e=>{if(e.target===LB)closePlayer()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!LB.hidden)closePlayer()});
 </script>
 </body>
 </html>

@@ -185,14 +185,14 @@ const ag=document.getElementById('acegrid');const aceSet=CLIPS.filter(c=>c.kind=
 const mg=document.getElementById('missgrid');const ms=CLIPS.filter(c=>c.kind==='miss').reverse();const missSet=ms.filter(c=>c.id);ms.forEach(c=>mg.appendChild(tile(c,false,missSet)));
 document.getElementById('mcountall').textContent=`${ms.length} near misses in October`;
 </script>
-<div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="Video player"><div class="lbtop"><button type="button" class="lbback" id="lbx">← Back to videos</button><div class="lbcount" id="lbcount"></div></div><button type="button" class="lbnav prev" id="lbprev" aria-label="Previous video">‹</button><button type="button" class="lbnav next" id="lbnext" aria-label="Next video">›</button><div class="lbin"><div class="lbframe" id="lbframe"></div><div class="lbcap" id="lbcap"></div><div class="lbhint">Swipe or use the arrows for the next shot</div></div></div>
+<div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="Video player"><div class="lbtop"><button type="button" class="lbback" id="lbx">← Back to videos</button><div class="lbcount" id="lbcount"></div></div><button type="button" class="lbnav prev" id="lbprev" aria-label="Previous video">‹</button><button type="button" class="lbnav next" id="lbnext" aria-label="Next video">›</button><div class="lbin"><div class="lbframe" id="lbframe"></div><div class="lbcap" id="lbcap"></div><div class="lbhint">Tap the video to pause · swipe or use the arrows for the next shot</div></div></div>
 <script>
 const LB=document.getElementById('lb'),LBF=document.getElementById('lbframe');let lbLast=null;
 let lbSet=[],lbIdx=0;
 const PLAYABLE=CLIPS.filter(c=>c.id);
 function lbLabel(c){return c.kind==='ace'?`Ace #${c.n}`:'So close'}
 function showClip(){const c=lbSet[lbIdx],label=lbLabel(c);
- LBF.innerHTML=`<iframe src="https://www.youtube-nocookie.com/embed/${c.id}?autoplay=1&playsinline=1&rel=0&loop=1&playlist=${c.id}" title="${label}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>`;
+ LBF.innerHTML=`<iframe src="https://www.youtube-nocookie.com/embed/${c.id}?autoplay=1&playsinline=1&rel=0&controls=0&iv_load_policy=3" title="${label}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>`;
  const d=new Date(c.date+'T00:00:00');document.getElementById('lbcap').innerHTML=`<b>${label}</b>${d.getDate()} ${d.toLocaleDateString('en-GB',{month:'short'})} · ${c.time}${c.rank?' · #'+c.rank+' in the world':''}`;
  
  const n=lbSet.length;document.getElementById('lbcount').textContent=n>1?`${lbIdx+1} of ${n}`:'';

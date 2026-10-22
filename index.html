@@ -94,6 +94,7 @@ body.lbopen{overflow:hidden}
 .lbbtn{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 18px;border-radius:999px;border:1px solid var(--l);background:var(--p);color:var(--w);font-weight:600;font-size:15px;text-decoration:none}
 .lbbtn:hover{border-color:var(--g)}
 .lbbtn.sub{background:var(--g);border-color:var(--g);color:var(--n)}
+.lbsub{display:inline-flex;min-height:24px;color-scheme:normal}.lbsub iframe{background:transparent!important}
 .subwrap{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center}.subtxt{font-size:14px;color:#C9D2D9}
 .navsub{display:inline-flex;vertical-align:middle;margin-left:20px}
 .lbhint{font-size:12px;color:var(--gr)}
@@ -191,7 +192,7 @@ const ag=document.getElementById('acegrid');const aceSet=CLIPS.filter(c=>c.kind=
 const mg=document.getElementById('missgrid');const ms=CLIPS.filter(c=>c.kind==='miss').reverse();const missSet=ms.filter(c=>c.id);ms.forEach(c=>mg.appendChild(tile(c,false,missSet)));
 document.getElementById('mcountall').textContent=`${ms.length} near misses in October`;
 </script>
-<div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="Video player"><div class="lbtop"><button type="button" class="lbback" id="lbx">← Back to videos</button><div class="lbcount" id="lbcount"></div></div><button type="button" class="lbnav prev" id="lbprev" aria-label="Previous video">‹</button><button type="button" class="lbnav next" id="lbnext" aria-label="Next video">›</button><div class="lbin"><div class="lbframe" id="lbframe"></div><div class="lbcap" id="lbcap"></div><div class="lbact"><div class="subwrap"><span class="subtxt">Like it? Tap Like in the video, then</span><div class="g-ytsubscribe" data-channelid="UC27KmdbdvPqOUqIPSbbMXqw" data-layout="default" data-theme="dark" data-count="hidden"></div></div></div><div class="lbhint">Tap the video to pause · swipe or use the arrows for the next shot</div></div></div>
+<div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="Video player"><div class="lbtop"><button type="button" class="lbback" id="lbx">← Back to videos</button><div class="lbcount" id="lbcount"></div></div><button type="button" class="lbnav prev" id="lbprev" aria-label="Previous video">‹</button><button type="button" class="lbnav next" id="lbnext" aria-label="Next video">›</button><div class="lbin"><div class="lbframe" id="lbframe"></div><div class="lbcap" id="lbcap"></div><div class="lbact"><div class="subwrap"><span class="subtxt">Like it? Tap Like in the video, then</span><div id="lbsub" class="lbsub"></div></div></div><div class="lbhint">Tap the video to pause · swipe or use the arrows for the next shot</div></div></div>
 <script>
 const LB=document.getElementById('lb'),LBF=document.getElementById('lbframe');let lbLast=null;
 let lbSet=[],lbIdx=0;
@@ -205,7 +206,8 @@ function showClip(){const c=lbSet[lbIdx],label=lbLabel(c);
  document.getElementById('lbprev').hidden=n<2;document.getElementById('lbnext').hidden=n<2}
 function stepClip(d){if(lbSet.length<2)return;lbIdx=(lbIdx+d+lbSet.length)%lbSet.length;showClip()}
 function openPlayer(c,set){lbLast=document.activeElement;lbSet=set&&set.length?set:[c];lbIdx=Math.max(0,lbSet.findIndex(x=>x.id===c.id));
- showClip();LB.hidden=false;document.body.classList.add('lbopen');document.getElementById('lbx').focus()}
+ showClip();LB.hidden=false;document.body.classList.add('lbopen');renderSub();document.getElementById('lbx').focus()}
+function renderSub(){const el=document.getElementById('lbsub');if(el.dataset.done)return;const go=()=>{if(window.gapi&&gapi.ytsubscribe){el.innerHTML='';gapi.ytsubscribe.render(el,{channelid:'UC27KmdbdvPqOUqIPSbbMXqw',layout:'default',theme:'dark',count:'hidden'});el.dataset.done=1}else setTimeout(go,300)};go()}
 function closePlayer(){LB.hidden=true;LBF.innerHTML='';document.body.classList.remove('lbopen');if(lbLast)lbLast.focus()}
 document.getElementById('lbx').onclick=closePlayer;LB.addEventListener('click',e=>{if(e.target===LB)closePlayer()});
 document.addEventListener('keydown',e=>{if(LB.hidden)return;if(e.key==='Escape')closePlayer();if(e.key==='ArrowRight')stepClip(1);if(e.key==='ArrowLeft')stepClip(-1)});

@@ -94,6 +94,8 @@ body.lbopen{overflow:hidden}
 .lbbtn{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 18px;border-radius:999px;border:1px solid var(--l);background:var(--p);color:var(--w);font-weight:600;font-size:15px;text-decoration:none}
 .lbbtn:hover{border-color:var(--g)}
 .lbbtn.sub{background:var(--g);border-color:var(--g);color:var(--n)}
+.subwrap{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center}.subtxt{font-size:14px;color:#C9D2D9}
+.navsub{display:inline-flex;vertical-align:middle;margin-left:20px}
 .lbhint{font-size:12px;color:var(--gr)}
 .lbframe{height:min(66vh,760px)}
 .lbtop{position:absolute;top:max(14px,env(safe-area-inset-top,0px));left:max(16px,env(safe-area-inset-left,0px));right:max(16px,env(safe-area-inset-right,0px));display:flex;justify-content:space-between;align-items:center;gap:12px}
@@ -112,7 +114,7 @@ body.lbopen{overflow:hidden}
 
 <div class="wrap">
 <header><div class="logo"><svg viewBox="0 0 800 800" aria-hidden="true"><circle cx="400" cy="400" r="400" fill="#18242F"/><path d="M150 560 C 260 150, 520 120, 620 300" fill="none" stroke="#8CCB3F" stroke-width="18" stroke-linecap="round" stroke-dasharray="2 30"/><circle cx="620" cy="300" r="22" fill="#8CCB3F"/><text x="400" y="545" text-anchor="middle" font-family="Barlow Condensed" font-weight="800" font-size="400" fill="#F2F5F7">A<tspan fill="#8CCB3F">G</tspan></text></svg><span>ALAN<span style="color:var(--g)">GOLF</span></span></div>
-<nav><a href="https://www.youtube.com/@alangolfing?sub_confirmation=1" target="_blank" rel="noopener" style="color:var(--g);font-weight:600">Subscribe on YouTube</a><a href="#equipment">Equipment</a><a href="#calendar">Calendar</a><a href="#aces">Aces</a><a href="#misses">Near misses</a></nav></header>
+<nav><span class="navsub"><div class="g-ytsubscribe" data-channelid="UC27KmdbdvPqOUqIPSbbMXqw" data-layout="default" data-theme="dark" data-count="hidden"></div></span><a href="#equipment">Equipment</a><a href="#calendar">Calendar</a><a href="#aces">Aces</a><a href="#misses">Near misses</a></nav></header>
 <div class="hero"><div style="flex:1 1 460px;display:flex;flex-direction:column;gap:16px">
 <div class="kick">Toptracer · Pebble Beach Golf Links · Hole 7 · 87 yd</div>
 <h1>Chasing <span>golf’s best</span></h1>
@@ -189,7 +191,7 @@ const ag=document.getElementById('acegrid');const aceSet=CLIPS.filter(c=>c.kind=
 const mg=document.getElementById('missgrid');const ms=CLIPS.filter(c=>c.kind==='miss').reverse();const missSet=ms.filter(c=>c.id);ms.forEach(c=>mg.appendChild(tile(c,false,missSet)));
 document.getElementById('mcountall').textContent=`${ms.length} near misses in October`;
 </script>
-<div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="Video player"><div class="lbtop"><button type="button" class="lbback" id="lbx">← Back to videos</button><div class="lbcount" id="lbcount"></div></div><button type="button" class="lbnav prev" id="lbprev" aria-label="Previous video">‹</button><button type="button" class="lbnav next" id="lbnext" aria-label="Next video">›</button><div class="lbin"><div class="lbframe" id="lbframe"></div><div class="lbcap" id="lbcap"></div><div class="lbact"><a class="lbbtn" id="lblike" target="_blank" rel="noopener" href="#"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 10v11"/><path d="M15 5.9 14 10h5.8a2 2 0 0 1 2 2.3l-1.4 7A2 2 0 0 1 18.4 21H7V10l4.3-7.3A1.9 1.9 0 0 1 15 4.6z"/></svg>Like on YouTube</a><a class="lbbtn sub" target="_blank" rel="noopener" href="https://www.youtube.com/@alangolfing?sub_confirmation=1"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M23 7.2a3 3 0 0 0-2.1-2.1C19 4.6 12 4.6 12 4.6s-7 0-8.9.5A3 3 0 0 0 1 7.2 31 31 0 0 0 .5 12a31 31 0 0 0 .5 4.8 3 3 0 0 0 2.1 2.1c1.9.5 8.9.5 8.9.5s7 0 8.9-.5a3 3 0 0 0 2.1-2.1 31 31 0 0 0 .5-4.8 31 31 0 0 0-.5-4.8zM9.8 15.1V8.9L15.5 12z"/></svg>Subscribe</a></div><div class="lbhint">Tap the video to pause · swipe or use the arrows for the next shot</div></div></div>
+<div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="Video player"><div class="lbtop"><button type="button" class="lbback" id="lbx">← Back to videos</button><div class="lbcount" id="lbcount"></div></div><button type="button" class="lbnav prev" id="lbprev" aria-label="Previous video">‹</button><button type="button" class="lbnav next" id="lbnext" aria-label="Next video">›</button><div class="lbin"><div class="lbframe" id="lbframe"></div><div class="lbcap" id="lbcap"></div><div class="lbact"><div class="subwrap"><span class="subtxt">Like it? Tap Like in the video, then</span><div class="g-ytsubscribe" data-channelid="UC27KmdbdvPqOUqIPSbbMXqw" data-layout="default" data-theme="dark" data-count="hidden"></div></div></div><div class="lbhint">Tap the video to pause · swipe or use the arrows for the next shot</div></div></div>
 <script>
 const LB=document.getElementById('lb'),LBF=document.getElementById('lbframe');let lbLast=null;
 let lbSet=[],lbIdx=0;
@@ -198,7 +200,7 @@ function lbLabel(c){return c.kind==='ace'?`Ace #${c.n}`:'So close'}
 function showClip(){const c=lbSet[lbIdx],label=lbLabel(c);
  LBF.innerHTML=`<iframe src="https://www.youtube-nocookie.com/embed/${c.id}?autoplay=1&playsinline=1&rel=0&loop=1&playlist=${c.id}&controls=0&disablekb=1&iv_load_policy=3&modestbranding=1&fs=0" title="${label}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>`;
  const d=new Date(c.date+'T00:00:00');document.getElementById('lbcap').innerHTML=`<b>${label}</b>${d.getDate()} ${d.toLocaleDateString('en-GB',{month:'short'})} · ${c.time}${c.rank?' · #'+c.rank+' in the world':''}`;
- document.getElementById('lblike').href=`https://www.youtube.com/shorts/${c.id}`;
+ 
  const n=lbSet.length;document.getElementById('lbcount').textContent=n>1?`${lbIdx+1} of ${n}`:'';
  document.getElementById('lbprev').hidden=n<2;document.getElementById('lbnext').hidden=n<2}
 function stepClip(d){if(lbSet.length<2)return;lbIdx=(lbIdx+d+lbSet.length)%lbSet.length;showClip()}
@@ -210,5 +212,6 @@ document.addEventListener('keydown',e=>{if(LB.hidden)return;if(e.key==='Escape')
 document.getElementById('lbprev').onclick=()=>stepClip(-1);document.getElementById('lbnext').onclick=()=>stepClip(1);
 let tx=null;LB.addEventListener('touchstart',e=>{tx=e.touches[0].clientX},{passive:true});LB.addEventListener('touchend',e=>{if(tx===null)return;const dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>60)stepClip(dx<0?1:-1);tx=null});
 </script>
+<script src="https://apis.google.com/js/platform.js" async></script>
 </body>
 </html>

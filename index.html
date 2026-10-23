@@ -102,6 +102,11 @@ body.lbopen{overflow:hidden}
 .lbnav[hidden]{display:none}
 .lb{padding-top:76px}
 @media (max-width:640px){.lbnav{top:auto;bottom:max(16px,env(safe-area-inset-bottom,0px));transform:none;width:48px;height:48px}.lbframe{height:min(60vh,700px)}}
+.sess{display:flex;align-items:center;gap:14px;width:100%;min-height:64px;padding:12px 16px;border-radius:16px;border:1px solid var(--g);background:#22303C;color:var(--w);text-align:left;font:inherit;cursor:pointer}
+.sess.soon2{cursor:default;border-style:dashed;border-color:var(--l)}
+.sessplay{width:40px;height:40px;flex:0 0 40px;border-radius:999px;background:var(--g);color:var(--n);display:flex;align-items:center;justify-content:center;font-size:16px}
+.sess.soon2 .sessplay{background:var(--l);color:var(--w)}
+.sesstxt{display:flex;flex-direction:column;gap:2px;min-width:0}.sesstxt b{font-family:'Barlow Condensed',sans-serif;font-size:24px;text-transform:uppercase;line-height:1}.sesstxt span{font-size:13px;color:var(--gr)}
 </style>
 </head>
 <body>
@@ -140,6 +145,10 @@ body.lbopen{overflow:hidden}
 <div class="wrap"><footer>AlanGolf · @alangolfing · Leaderboard data from Toptracer Range. Not affiliated with Toptracer or Titleist.</footer></div>
 <script>
 const CLIPS=[{"kind":"miss","n":null,"date":"2026-10-06","time":"18:58","id":null,"poster":null},{"kind":"miss","n":null,"date":"2026-10-06","time":"18:59","id":null,"poster":null},{"kind":"miss","n":null,"date":"2026-10-06","time":"19:01","id":null,"poster":null},{"kind":"miss","n":null,"date":"2026-10-06","time":"19:03","id":null,"poster":null},{"kind":"miss","n":null,"date":"2026-10-07","time":"22:30","id":null,"poster":null},{"kind":"miss","n":null,"date":"2026-10-07","time":"22:31","id":"c4U-B5n0pvI","poster":"https://i.ytimg.com/vi/c4U-B5n0pvI/oardefault.jpg"},{"kind":"miss","n":null,"date":"2026-10-10","time":"20:44","id":null,"poster":null},{"kind":"miss","n":null,"date":"2026-10-10","time":"21:53","id":null,"poster":null},{"kind":"ace","n":15,"date":"2026-10-10","time":"22:07","id":null,"poster":null,"rank":11},{"kind":"miss","n":null,"date":"2026-10-10","time":"22:10","id":null,"poster":null},{"kind":"ace","n":16,"date":"2026-10-16","time":"17:38","id":"GQ9y1wUhkWg","poster":"https://i.ytimg.com/vi/GQ9y1wUhkWg/oardefault.jpg","rank":11},{"kind":"miss","n":null,"date":"2026-10-16","time":"17:45","id":null,"poster":null},{"kind":"miss","n":null,"date":"2026-10-16","time":"17:46","id":null,"poster":null},{"kind":"miss","n":null,"date":"2026-10-16","time":"17:49","id":null,"poster":null},{"kind":"miss","n":null,"date":"2026-10-16","time":"18:02","id":null,"poster":null},{"kind":"miss","n":null,"date":"2026-10-16","time":"18:10","id":null,"poster":null},{"kind":"ace","n":17,"date":"2026-10-16","time":"18:13","id":"rxe7CDJMqKc","poster":"https://i.ytimg.com/vi/rxe7CDJMqKc/oardefault.jpg","rank":9},{"kind":"miss","n":null,"date":"2026-10-16","time":"18:15","id":null,"poster":null},{"kind":"miss","n":null,"date":"2026-10-16","time":"18:28","id":null,"poster":null},{"kind":"ace","n":18,"date":"2026-10-16","time":"18:29","id":"IcnmYpnFRvk","poster":"https://i.ytimg.com/vi/IcnmYpnFRvk/oardefault.jpg","rank":8},{"kind":"miss","n":null,"date":"2026-10-16","time":"18:32","id":null,"poster":null},{"kind":"miss","n":null,"date":"2026-10-16","time":"19:22","id":null,"poster":null},{"kind":"miss","n":null,"date":"2026-10-16","time":"19:27","id":null,"poster":null},{"kind":"miss","n":null,"date":"2026-10-17","time":"16:50","id":null,"poster":null},{"kind":"miss","n":null,"date":"2026-10-17","time":"17:31","id":null,"poster":null},{"kind":"miss","n":null,"date":"2026-10-17","time":"17:32","id":null,"poster":null},{"kind":"miss","n":null,"date":"2026-10-17","time":"17:42","id":"ACFsI4KIJwY","poster":"https://i.ytimg.com/vi/ACFsI4KIJwY/oardefault.jpg"},{"kind":"miss","n":null,"date":"2026-10-20","time":"18:10","id":null,"poster":null},{"kind":"miss","n":null,"date":"2026-10-20","time":"18:52","id":null,"poster":null},{"kind":"ace","n":19,"date":"2026-10-21","time":"14:47","id":null,"poster":null,"rank":7},{"kind":"miss","n":null,"date":"2026-10-21","time":"15:45","id":null,"poster":null},{"kind":"miss","n":null,"date":"2026-10-21","time":"15:57","id":null,"poster":null},{"kind":"miss","n":null,"date":"2026-10-21","time":"16:09","id":null,"poster":null},{"kind":"miss","n":null,"date":"2026-10-21","time":"16:11","id":null,"poster":null}];
+const SESSIONS={"2026-10-06":{d:"0:17"},"2026-10-07":{d:"0:11"},"2026-10-10":{d:"0:22"},"2026-10-16":{d:"0:50"},"2026-10-17":{d:"0:17"},"2026-10-20":{d:"0:11"},"2026-10-21":{d:"0:23"}};
+function sessionTile(day,list){const S=SESSIONS[day];if(!S)return null;const n=list.length,a=list.filter(c=>c.kind==='ace').length;
+ const el=document.createElement(S.id?'button':'div');el.className='sess'+(S.id?'':' soon2');if(S.id){el.type='button';el.setAttribute('aria-label','Watch the whole session');el.onclick=()=>openPlayer({id:S.id,kind:'session',date:day,time:S.d},[{id:S.id,kind:'session',date:day,time:S.d}])}
+ el.innerHTML=`<span class="sessplay" aria-hidden="true">▶</span><span class="sesstxt"><b>Watch the session</b><span>${n} shot${n>1?'s':''}${a?` · ${a} ace${a>1?'s':''}`:''} · ${S.d}${S.id?'':' · uploading soon'}</span></span>`;return el}
 const MON=['January','February','March','April','May','June','July','August','September','October','November','December'];
 const fmt=d=>{const [y,m,dd]=d.split('-').map(Number);return new Date(y,m-1,dd)};
 function tile(c,noDate,set){const w=document.createElement('div');w.className='clip';
@@ -148,7 +157,7 @@ function tile(c,noDate,set){const w=document.createElement('div');w.className='c
   b.innerHTML=`<img alt="" loading="lazy" src="${c.poster}" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/${c.id}/hqdefault.jpg'"><div class="play" aria-hidden="true">▶</div>`;
   b.onclick=()=>openPlayer(c,(set||PLAYABLE));
   w.appendChild(b)}
- else{const s=document.createElement('div');s.className='soon';s.innerHTML=`<div><div class="big" style="font-size:28px;color:${c.kind==='ace'?'var(--g)':'var(--w)'}">${label}</div>Uploading soon</div>`;w.appendChild(s)}
+ else{const s=document.createElement('div');s.className='soon';s.innerHTML=`<div><div class="big" style="font-size:28px;color:${c.kind==='ace'?'var(--g)':'var(--w)'}">${label}</div>${c.kind==='miss'?'In the session':'Uploading soon'}</div>`;w.appendChild(s)}
  const cap=document.createElement('div');cap.className='cap';const d=fmt(c.date);
  cap.innerHTML=(noDate?`<b>${c.time}</b>`:`<b>${d.getDate()} ${MON[d.getMonth()].slice(0,3)}</b> · ${c.time}`)+(c.rank?` · #${c.rank} in the world`:'');w.appendChild(cap);return w}
 const byDay={};CLIPS.forEach(c=>(byDay[c.date]=byDay[c.date]||[]).push(c));
@@ -171,6 +180,7 @@ function render(){const days=document.getElementById('days');days.innerHTML='';
  const nums=list.filter(c=>c.kind==='ace').map(c=>c.n);const nm=list.length-nums.length;
  document.getElementById('phead').textContent=nums.length?(nums.length>1?`Hole-in-ones #${nums[0]}–${nums[nums.length-1]}`:`Hole-in-one #${nums[0]}`):`${nm} near miss${nm>1?'es':''}`;
  const pc=document.getElementById('pclips');pc.innerHTML='';
+ const st=sessionTile(sel,list);if(st)pc.appendChild(st);
  const acesL=list.filter(c=>c.kind==='ace'),missL=list.filter(c=>c.kind==='miss');const daySet=[...acesL,...missL].filter(c=>c.id);
  if(acesL.length){const g=document.createElement('div');g.className='acerow';g.style.setProperty('--n',Math.min(acesL.length,3));acesL.forEach(c=>g.appendChild(tile(c,true,daySet)));pc.appendChild(g)}
  if(missL.length){const wrap=document.createElement('div');wrap.className='mc';
@@ -190,7 +200,7 @@ document.getElementById('mcountall').textContent=`${ms.length} near misses in Oc
 const LB=document.getElementById('lb'),LBF=document.getElementById('lbframe');let lbLast=null;
 let lbSet=[],lbIdx=0;
 const PLAYABLE=CLIPS.filter(c=>c.id);
-function lbLabel(c){return c.kind==='ace'?`Ace #${c.n}`:'So close'}
+function lbLabel(c){return c.kind==='ace'?`Ace #${c.n}`:c.kind==='session'?'Session':'So close'}
 function showClip(){const c=lbSet[lbIdx],label=lbLabel(c);
  LBF.innerHTML=`<iframe src="https://www.youtube-nocookie.com/embed/${c.id}?autoplay=1&playsinline=1&rel=0&loop=1&playlist=${c.id}" title="${label}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>`;
  const d=new Date(c.date+'T00:00:00');document.getElementById('lbcap').innerHTML=`<b>${label}</b>${d.getDate()} ${d.toLocaleDateString('en-GB',{month:'short'})} · ${c.time}${c.rank?' · #'+c.rank+' in the world':''}`;

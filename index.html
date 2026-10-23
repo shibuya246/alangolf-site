@@ -42,8 +42,8 @@ section{padding:64px 0}.band{background:var(--p)}
 .grid7{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
 .dow{font-size:11px;color:var(--gr);text-align:center;text-transform:uppercase;letter-spacing:.1em}
 .day{aspect-ratio:1;min-height:40px;border-radius:12px;border:1px solid #26343F;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:14px;color:var(--gr);background:none;font-family:inherit;position:relative;padding:0}
-button.day{cursor:pointer;color:var(--w);border-color:var(--l)}
-button.day.ace{border-color:var(--g);background:#22303C;font-weight:600}
+button.day{cursor:pointer;color:var(--w);border:2px solid #7CC4F0}button.day .dot{background:#7CC4F0}
+button.day.ace{border:2px solid var(--g);background:#22303C;font-weight:600}
 button.day.sel{background:var(--g);color:var(--n)}
 .dot{width:6px;height:6px;border-radius:9px;background:var(--gr);margin-top:3px}
 .ace .flag{width:16px;height:16px;margin-top:2px}
@@ -137,7 +137,7 @@ body.lbopen{overflow:hidden}
 <div class="cal"><div class="month"><div class="mhead"><button id="prev" aria-label="Previous month">‹</button><div style="text-align:center"><div class="big" style="font-size:30px" id="mlabel"></div><div class="cap" id="mcount"></div></div><button id="next" aria-label="Next month">›</button></div>
 <div class="grid7" style="margin-bottom:6px"><div class="dow">Mon</div><div class="dow">Tue</div><div class="dow">Wed</div><div class="dow">Thu</div><div class="dow">Fri</div><div class="dow">Sat</div><div class="dow">Sun</div></div>
 <div class="grid7" id="days"></div>
-<div class="cap" style="margin-top:14px">Flag = ace · dot = near misses filmed</div></div>
+<div class="cap" style="margin-top:14px">Green = ace · blue = near misses filmed</div></div>
 <div class="panel"><div class="cap" id="pdate"></div><h3 id="phead"></h3><div id="pclips" class="dayclips"></div></div></div>
 </div></section>
 <section id="aces"><div class="wrap"><div class="sh"><h2>Every ace</h2><div class="cap">Newest first</div></div><div class="clips" id="acegrid"></div></div></section>

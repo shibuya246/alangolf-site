@@ -36,7 +36,7 @@ nav a{color:var(--w);text-decoration:none;margin-left:20px;font-size:15px}
 section{padding:64px 0}.band{background:var(--p)}
 .sh{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:12px;margin-bottom:24px}.sh h2{font-size:48px}
 .cal{display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start}
-.month{flex:1 1 460px;background:var(--n);border-radius:22px;padding:22px}
+.month{flex:1 1 460px;max-width:760px;margin:0 auto;background:var(--n);border-radius:22px;padding:22px}
 .mhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
 .mhead button{width:44px;height:44px;border-radius:999px;border:1px solid var(--l);background:none;color:var(--w);font-size:20px;cursor:pointer}
 .grid7{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
@@ -137,8 +137,7 @@ body.lbopen{overflow:hidden}
 <div class="cal"><div class="month"><div class="mhead"><button id="prev" aria-label="Previous month">‹</button><div style="text-align:center"><div class="big" style="font-size:30px" id="mlabel"></div><div class="cap" id="mcount"></div></div><button id="next" aria-label="Next month">›</button></div>
 <div class="grid7" style="margin-bottom:6px"><div class="dow">Mon</div><div class="dow">Tue</div><div class="dow">Wed</div><div class="dow">Thu</div><div class="dow">Fri</div><div class="dow">Sat</div><div class="dow">Sun</div></div>
 <div class="grid7" id="days"></div>
-<div class="cap" style="margin-top:14px">Green = ace · blue = near misses filmed</div></div>
-<div class="panel"><div class="cap" id="pdate"></div><h3 id="phead"></h3><div id="pclips" class="dayclips"></div></div></div>
+<div class="cap" style="margin-top:14px">Green = ace · blue = near misses filmed · tap a day to watch the session</div><div class="cap" id="dnote" aria-live="polite" style="margin-top:6px;color:var(--w)"></div></div></div>
 </div></section>
 <section id="aces"><div class="wrap"><div class="sh"><h2>Every ace</h2><div class="cap">Newest first</div></div><div class="clips" id="acegrid"></div></div></section>
 
@@ -171,18 +170,11 @@ function render(){const days=document.getElementById('days');days.innerHTML='';
  for(let d=1;d<=dim;d++){const k=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;const list=byDay[k];
   if(!list){const e=document.createElement('div');e.className='day';e.textContent=d;days.appendChild(e);continue}
   const na=list.filter(c=>c.kind==='ace').length;aces+=na;const b=document.createElement('button');
-  b.className='day'+(na?' ace':'')+(k===sel?' sel':'');b.setAttribute('aria-label',`${d} ${MON[m]}: ${na} aces, ${list.length-na} near misses`);
+  b.className='day'+(na?' ace':'');b.setAttribute('aria-label',`${d} ${MON[m]}: ${na} aces, ${list.length-na} near misses`);
   b.innerHTML=`<span>${d}</span>`+(na?`<svg class="flag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 21V4"/><path d="M6 4l11 3.5L6 11"/><path d="M3 21h8"/></svg>`:`<span class="dot"></span>`)+(na>1?`<span class="badge">×${na}</span>`:'');
-  b.onclick=()=>{sel=k;render()};days.appendChild(b)}
+  const S=SESSIONS[k],lbl=`${d} ${MON[m].slice(0,3)}: ${list.length} shot${list.length>1?'s':''}${na?` · ${na} ace${na>1?'s':''}`:''}`;b.title=S&&S.id?`${lbl} · watch the session`:lbl;
+  b.onclick=()=>{if(S&&S.id){document.getElementById('dnote').textContent='';openPlayer({id:S.id,kind:'session',date:k,time:S.d},[{id:S.id,kind:'session',date:k,time:S.d}])}else document.getElementById('dnote').textContent=`${lbl} · session video coming soon`};days.appendChild(b)}
  document.getElementById('mlabel').textContent=`${MON[m]} ${y}`;document.getElementById('mcount').textContent=aces?`${aces} ace${aces>1?'s':''} this month`:'No aces logged';
- const list=(byDay[sel]||[]).slice().sort((a,b)=>(a.kind===b.kind?a.time.localeCompare(b.time):a.kind==='ace'?-1:1));
- const d=fmt(sel);document.getElementById('pdate').textContent=d.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
- const nums=list.filter(c=>c.kind==='ace').map(c=>c.n);const nm=list.length-nums.length;
- document.getElementById('phead').textContent=nums.length?(nums.some(x=>!x)?(nums.length>1?`${nums.length} hole-in-ones`:'Hole-in-one'):nums.length>1?`Hole-in-ones #${nums[0]}–${nums[nums.length-1]}`:`Hole-in-one #${nums[0]}`):`${nm} near miss${nm>1?'es':''}`;
- const pc=document.getElementById('pclips');pc.innerHTML='';
- const st=sessionTile(sel,list);if(st)pc.appendChild(st);
- const acesL=list.filter(c=>c.kind==='ace'),missL=list.filter(c=>c.kind==='miss');const daySet=[...acesL,...missL].filter(c=>c.id);
- if(acesL.length){const g=document.createElement('div');g.className='acerow';g.style.setProperty('--n',Math.min(acesL.length,3));acesL.forEach(c=>g.appendChild(tile(c,true,daySet)));pc.appendChild(g)}
  }
 document.getElementById('prev').onclick=()=>{m--;if(m<0){m=11;y--}render()};document.getElementById('next').onclick=()=>{m++;if(m>11){m=0;y++}render()};
 render();

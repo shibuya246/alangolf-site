@@ -113,6 +113,8 @@ body.lbopen{overflow:hidden}
 @media(max-width:520px){.mstats{grid-template-columns:repeat(2,1fr)}}
 .soon.photo{position:relative;padding:0;overflow:hidden}.soon.photo img{width:100%;height:100%;object-fit:cover;display:block;opacity:.85}.ptag{position:absolute;left:10px;right:10px;bottom:10px;background:rgba(15,26,36,.88);border-radius:12px;padding:8px 10px;display:flex;flex-direction:column;gap:2px;font-size:12px;color:var(--gr)}.ptag b{color:var(--g);font-family:'Barlow Condensed',sans-serif;font-size:22px;text-transform:uppercase}
 @media(max-width:640px){.stat .big{font-size:clamp(20px,5.4vw,40px);white-space:nowrap}header nav{display:none}header{padding:14px 0 0}.hero{padding-top:12px;gap:28px}.ksep{display:none}.kl2{display:block;margin-top:4px}}
+.lbphoto{width:100%;height:100%;object-fit:contain;display:block;background:#000;border-radius:14px}.soon.photo{cursor:pointer;font:inherit;color:inherit;background:none}
+.lbframe.photo{height:auto!important;aspect-ratio:auto;width:min(92vw,1000px)}.lbframe.photo .lbphoto{height:auto;border-radius:0}
 </style>
 </head>
 <body>
@@ -162,7 +164,7 @@ function tile(c,noDate,set){const w=document.createElement('div');w.className='c
   b.innerHTML=`<img alt="" loading="lazy" src="${c.poster}" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/${c.id}/hqdefault.jpg'"><div class="play" aria-hidden="true">▶</div>`;
   b.onclick=()=>openPlayer(c,(set||PLAYABLE));
   w.appendChild(b)}
- else if(c.photo){const s=document.createElement('div');s.className='soon photo';s.innerHTML=`<img alt="Toptracer screen showing HIO for ${label}" loading="lazy" src="${c.photo}"><div class="ptag"><b>${label}</b><span>Photo only, no video</span></div>`;w.appendChild(s)}
+ else if(c.photo){const s=document.createElement('button');s.type='button';s.onclick=()=>openPlayer(c,[c]);s.setAttribute('aria-label',`See photo of ${label}`);s.className='soon photo';s.innerHTML=`<img alt="Toptracer screen showing HIO for ${label}" loading="lazy" src="${c.photo}"><div class="ptag"><b>${label}</b><span>Photo only, no video</span></div>`;w.appendChild(s)}
  else{const s=document.createElement('div');s.className='soon';s.innerHTML=`<div><div class="big" style="font-size:28px;color:${c.kind==='ace'?'var(--g)':'var(--w)'}">${label}</div>${c.kind==='miss'?'In the session':c.nf?'Not filmed':'Uploading soon'}</div>`;w.appendChild(s)}
  const cap=document.createElement('div');cap.className='cap';const d=fmt(c.date);
  cap.innerHTML=(noDate?`<b>${c.time||'Ace'}</b>`:`<b>${d.getDate()} ${MON[d.getMonth()].slice(0,3)}${d.getFullYear()!==2026?' '+d.getFullYear():''}</b>${c.time?' · '+c.time:''}`)+(c.rank?` · #${c.rank} in the world`:'');w.appendChild(cap);return w}
@@ -179,8 +181,8 @@ function render(){const days=document.getElementById('days');days.innerHTML='';
   const na=list.filter(c=>c.kind==='ace').length;aces+=na;const b=document.createElement('button');
   b.className='day'+(na?' ace':'');b.setAttribute('aria-label',`${d} ${MON[m]}: ${na} aces, ${list.length-na} near misses`);
   b.innerHTML=`<span>${d}</span>`+(na?`<svg class="flag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 21V4"/><path d="M6 4l11 3.5L6 11"/><path d="M3 21h8"/></svg>`:`<span class="dot"></span>`)+(na>1?`<span class="badge">×${na}</span>`:'');
-  const S=SESSIONS[k],lbl=`${d} ${MON[m].slice(0,3)}: ${list.length} shot${list.length>1?'s':''}${na?` · ${na} ace${na>1?'s':''}`:''}`;b.title=S&&S.id?`${lbl} · watch the session`:lbl;
-  b.onclick=()=>{if(S&&S.id){document.getElementById('dnote').textContent='';openPlayer({id:S.id,kind:'session',date:k,time:S.d},[{id:S.id,kind:'session',date:k,time:S.d}])}else document.getElementById('dnote').textContent=`${lbl} · session video coming soon`};days.appendChild(b)}
+  const S=SESSIONS[k],nfm=list.filter(c=>!c.nf).length,ph=list.find(c=>c.photo),lbl=`${d} ${MON[m].slice(0,3)}: ${nfm?`${nfm} shot${nfm>1?'s':''} filmed`:'not filmed'}${na?` · ${na} ace${na>1?'s':''}`:''}`;b.title=S&&S.id?`${lbl} · watch the session`:ph?`${lbl} · see the photo`:lbl;
+  b.onclick=()=>{if(S&&S.id){document.getElementById('dnote').textContent='';openPlayer({id:S.id,kind:'session',date:k,time:S.d},[{id:S.id,kind:'session',date:k,time:S.d}])}else if(ph){document.getElementById('dnote').textContent='';openPlayer(ph,[ph])}else document.getElementById('dnote').textContent=nfm?`${lbl} · session video coming soon`:`${lbl} · no video or photo`};days.appendChild(b)}
  summary();document.getElementById('mlabel').textContent=`${MON[m]} ${y}`;document.getElementById('mcount').textContent=aces?`${aces} ace${aces>1?'s':''} this month`:'No aces logged';
  }
 function summary(){const pre=`${y}-${String(m+1).padStart(2,'0')}-`;const ks=Object.keys(byDay).filter(k=>k.startsWith(pre)).sort();
@@ -193,8 +195,8 @@ function summary(){const pre=`${y}-${String(m+1).padStart(2,'0')}-`;const ks=Obj
  ks.forEach(k=>{const L=byDay[k],l=L.filter(c=>!c.nf),na=L.filter(c=>c.kind==='ace').length,nfa=L.filter(c=>c.nf).length,S=SESSIONS[k],v=S&&S.id,d=fmt(k);
   const r=document.createElement(v?'button':'div');r.className='mrow'+(na?' ace':'')+(v?' vid':'');
   const nums=L.filter(c=>c.kind==='ace'&&c.n).map(c=>'#'+c.n).join(', ');
-  r.innerHTML=`<span class="md">${d.toLocaleDateString('en-GB',{weekday:'short',day:'numeric'})}</span><span class="mt">${l.length?`${l.length} shot${l.length>1?'s':''} filmed`:'Not filmed'}${na?`${l.length?' · ':' · '}<b>${na} ace${na>1?'s':''}${nums?' ('+nums+')':''}</b>`:''}</span><span class="mp">${v?'▶ '+S.d:l.length?'soon':'no video'}</span>`;
-  if(v){r.type='button';r.onclick=()=>openPlayer({id:S.id,kind:'session',date:k,time:S.d},[{id:S.id,kind:'session',date:k,time:S.d}])}
+  r.innerHTML=`<span class="md">${d.toLocaleDateString('en-GB',{weekday:'short',day:'numeric'})}</span><span class="mt">${l.length?`${l.length} shot${l.length>1?'s':''} filmed`:'Not filmed'}${na?`${l.length?' · ':' · '}<b>${na} ace${na>1?'s':''}${nums?' ('+nums+')':''}</b>`:''}</span><span class="mp">${v?'▶ '+S.d:L.some(c=>c.photo)?'▶ photo':l.length?'soon':'no video'}</span>`;
+  const P=L.find(c=>c.photo);if(v){r.type='button';r.onclick=()=>openPlayer({id:S.id,kind:'session',date:k,time:S.d},[{id:S.id,kind:'session',date:k,time:S.d}])}else if(P){r.style.cursor='pointer';r.setAttribute('role','button');r.tabIndex=0;r.onclick=()=>openPlayer(P,[P])}
   ml.appendChild(r)})}
 document.getElementById('prev').onclick=()=>{m--;if(m<0){m=11;y--}render()};document.getElementById('next').onclick=()=>{m++;if(m>11){m=0;y++}render()};
 render();
@@ -209,8 +211,8 @@ let lbSet=[],lbIdx=0;
 const PLAYABLE=CLIPS.filter(c=>c.id);
 function lbLabel(c){return c.kind==='ace'?(c.n?`Ace #${c.n}`:'Ace'):c.kind==='session'?'Session':'So close'}
 function showClip(){const c=lbSet[lbIdx],label=lbLabel(c);
- LBF.innerHTML=`<iframe src="https://www.youtube-nocookie.com/embed/${c.id}?autoplay=1&playsinline=1&rel=0&loop=1&playlist=${c.id}" title="${label}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>`;
- const d=new Date(c.date+'T00:00:00');document.getElementById('lbcap').innerHTML=`<b>${label}</b>${d.getDate()} ${d.toLocaleDateString('en-GB',{month:'short'})} · ${c.time}${c.rank?' · #'+c.rank+' in the world':''}`;
+ LBF.classList.toggle('photo',!!c.photo);document.querySelector('.lbhint').hidden=lbSet.length<2;LBF.innerHTML=c.photo?`<img class="lbphoto" src="${c.photo}" alt="Toptracer screen showing HIO for ${label}">`:`<iframe src="https://www.youtube-nocookie.com/embed/${c.id}?autoplay=1&playsinline=1&rel=0&loop=1&playlist=${c.id}" title="${label}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>`;
+ const d=new Date(c.date+'T00:00:00');document.getElementById('lbcap').innerHTML=`<b>${label}</b>${d.getDate()} ${d.toLocaleDateString('en-GB',{month:'short'})}${d.getFullYear()!==2026?' '+d.getFullYear():''}${c.time?' · '+c.time:''}${c.photo?' · photo only, no video':''}${c.rank?' · #'+c.rank+' in the world':''}`;
  
  const n=lbSet.length;document.getElementById('lbcount').textContent=n>1?`${lbIdx+1} of ${n}`:'';
  document.getElementById('lbprev').hidden=n<2;document.getElementById('lbnext').hidden=n<2}

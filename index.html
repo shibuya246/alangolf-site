@@ -219,7 +219,7 @@ const LB=document.getElementById('lb'),LBF=document.getElementById('lbframe');le
 let lbSet=[],lbIdx=0;
 const PLAYABLE=CLIPS.filter(c=>c.id);
 function lbLabel(c){return c.kind==='ace'?(c.n?`Ace #${c.n}`:'Ace'):c.kind==='session'?'Session':'So close'}
-function showClip(){const c=lbSet[lbIdx],label=lbLabel(c);
+function showClip(){const c=lbSet[lbIdx],label=lbLabel(c);try{gtag('event',c.photo?'view_ace_photo':c.kind==='session'?'play_session':'play_ace',{clip_label:label,clip_date:c.date,video_id:c.id||'photo'})}catch(e){}
  LBF.classList.toggle('photo',!!c.photo);document.querySelector('.lbhint').hidden=lbSet.length<2;LBF.innerHTML=c.photo?`<img class="lbphoto" src="${c.photo}" alt="Toptracer screen showing HIO for ${label}">`:`<iframe src="https://www.youtube-nocookie.com/embed/${c.id}?autoplay=1&playsinline=1&rel=0&loop=1&playlist=${c.id}" title="${label}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>`;
  const d=new Date(c.date+'T00:00:00');document.getElementById('lbcap').innerHTML=`<b>${label}</b>${d.getDate()} ${d.toLocaleDateString('en-GB',{month:'short'})}${d.getFullYear()!==2026?' '+d.getFullYear():''}${c.time?' · '+c.time:''}${c.photo?' · photo only, no video':''}${c.rank?' · #'+c.rank+' in the world':''}`;
  
